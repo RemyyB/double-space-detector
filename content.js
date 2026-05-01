@@ -29,7 +29,7 @@ function highlightDoubleSpaces() {
         if (!WS_TEST.test(node.textContent)) continue;
         const span = document.createElement('span');
         span.innerHTML = node.textContent.replace(WS_REPLACE,
-            `$1<mark style="${MARK_STYLE}">$2</mark>`
+            `$1<mark data-dsd style="${MARK_STYLE}">$2</mark>`
         );
         node.replaceWith(...span.childNodes);
     }
@@ -38,5 +38,7 @@ function highlightDoubleSpaces() {
 chrome.runtime.sendMessage({ action: 'updateBadge', count: countDoubleSpaces() });
 
 chrome.runtime.onMessage.addListener(({ action }) => {
-    if (action === 'highlightSpaces') highlightDoubleSpaces();
+    if (action !== 'highlightSpaces') return;
+    highlightDoubleSpaces()
+    document.querySelector('mark[data-dsd]').scrollIntoView({ behavior: 'smooth', block: 'center'  });
 });
