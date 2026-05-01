@@ -2,7 +2,15 @@ const WS_BASE = `(?:[\u0020\u00A0\t\u2028\u2029]{2,}|[\u0020\u00A0\t][\n\u2028\u
 const WS_TEST = new RegExp(WS_BASE);
 const WS_REPLACE = new RegExp(`(\\S)(${WS_BASE})(?=\\S)`, 'g');
 const SKIP_TAGS = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT']);
-const MARK_STYLE = 'background:red;color:white;padding:0 2px;font-weight:bold';
+const MARK_STYLE = [
+    'background: #FF4952',
+    'color: white',
+    'padding: 0 2px',
+    'border-radius: 100vw',
+    'font-weight: bold',
+    'outline: 2px solid #FF4952',
+    'outline-offset: 2px'
+].join(';');
 
 function getTextNodes() {
     const walker = document.createTreeWalker(
