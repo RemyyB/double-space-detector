@@ -43,7 +43,9 @@ function highlightDoubleSpaces() {
     }
 }
 
-chrome.runtime.sendMessage({ action: 'updateBadge', count: countDoubleSpaces() });
+chrome.runtime.sendMessage({ action: 'updateBadge', count: countDoubleSpaces() }, () => {
+    if (chrome.runtime.lastError) {} // suppress error on pages that reload fast
+});
 
 chrome.runtime.onMessage.addListener(({ action }) => {
     if (action !== 'highlightSpaces') return;

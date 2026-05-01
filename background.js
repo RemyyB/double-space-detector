@@ -15,5 +15,10 @@ chrome.runtime.onMessage.addListener(({ action, count }, sender) => {
 });
 
 chrome.action.onClicked.addListener(tab =>
-    chrome.tabs.sendMessage(tab.id, { action: 'highlightSpaces' })
+    chrome.tabs.sendMessage(tab.id, { action: 'highlightSpaces' }, () => {
+        if (chrome.runtime.lastError) {
+            // Tab has no content script — e.g. opened before extension loaded
+            console.warn('Could not reach tab:', chrome.runtime.lastError.message);
+        }
+    })
 );
