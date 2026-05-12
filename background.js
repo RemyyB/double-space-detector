@@ -5,19 +5,18 @@ const ICONS = (prefix) => ({
     "128": `${prefix}128.png`
 });
 
-chrome.runtime.onMessage.addListener(({ action, count }, sender) => {
+chrome.runtime.onMessage.addListener(({ action, wsCount, weirdCount }, sender) => {
     if (action === 'updateBadge') {
-        chrome.action.setIcon({
-            path: ICONS(count > 0 ? 'icon-red' : 'icon'),
-            tabId: sender.tab.id
-        });
+        const prefix = wsCount > 0 ? 'icon-red'
+            : weirdCount > 0 ? 'icon-orange'
+                : 'icon';
+        chrome.action.setIcon({ path: ICONS(prefix), tabId: sender.tab.id });
     }
 });
 
 chrome.action.onClicked.addListener(tab =>
     chrome.tabs.sendMessage(tab.id, { action: 'highlightSpaces' }, () => {
         if (chrome.runtime.lastError) {
-            // Tab has no content script — e.g. opened before extension loaded
             console.warn('Could not reach tab:', chrome.runtime.lastError.message);
         }
     })
